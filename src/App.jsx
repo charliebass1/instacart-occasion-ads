@@ -25,10 +25,11 @@ const OCCASIONS = {
 };
 
 const SAMPLES = [
-  { label: "Sarah", items: ["tortilla chips","salsa","beer 12-pack","frozen wings","paper plates","guacamole"] },
-  { label: "Mike", items: ["chicken breast 3lb","brown rice","broccoli","sweet potato","greek yogurt","eggs 18ct","spinach"] },
-  { label: "Jen", items: ["penne pasta","marinara sauce","ground beef","garlic","salad mix","italian bread"] },
-  { label: "David", items: ["sandwich bread","peanut butter","grape jelly","juice boxes","goldfish crackers","string cheese"] },
+  { label: "Sarah", desc: "Game Day", items: ["tortilla chips","salsa","beer 12-pack","frozen wings","paper plates","guacamole"] },
+  { label: "Mike", desc: "Meal Prep", items: ["chicken breast 3lb","brown rice","broccoli","sweet potato","greek yogurt","eggs 18ct","spinach"] },
+  { label: "Jen", desc: "Weeknight Dinner", items: ["penne pasta","marinara sauce","ground beef","garlic","salad mix","italian bread"] },
+  { label: "David", desc: "Kids' Lunches", items: ["sandwich bread","peanut butter","grape jelly","juice boxes","goldfish crackers","string cheese"] },
+  { label: "Lisa", desc: "Baby Care", items: ["baby food","diapers","formula","baby wipes","whole milk","bananas","sweet potato"] },
 ];
 
 const CAMPAIGNS = [
@@ -96,69 +97,69 @@ function EngineTab() {
 
   return (
     <div>
-      <h2 className="text-lg font-bold mb-0.5" style={{ color: C.dark }}>Occasion Engine</h2>
-      <p className="text-gray-500 text-xs mb-4">Select a sample cart to see occasion classification in action.</p>
+      <h2 className="text-xl font-bold mb-1" style={{ color: C.dark }}>Occasion Engine</h2>
+      <p className="text-gray-500 text-sm mb-5">Select a sample cart to see occasion classification in action.</p>
 
-      <Card className="p-3.5 mb-3">
-        <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 9 }}>Sample Carts</p>
-        <div className="grid grid-cols-2 gap-1.5 mb-2.5">
+      <Card className="p-5 mb-4">
+        <p className="text-xs text-gray-400 uppercase tracking-widest mb-3">Sample Carts</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
           {SAMPLES.map(s => (
             <button key={s.label} onClick={() => pick(s)}
-              className="p-2 rounded-xl text-left transition-all"
+              className="p-3 rounded-xl text-left transition-all"
               style={{ backgroundColor: sel === s.label ? C.dark : C.light, color: sel === s.label ? "white" : C.text }}>
-              <p className="font-semibold" style={{ fontSize: 11 }}>{s.label}'s Cart</p>
-              <p style={{ fontSize: 9, opacity: 0.7 }}>{s.items.length} items</p>
+              <p className="font-semibold text-sm">{s.label}'s Cart</p>
+              <p className="text-xs mt-0.5" style={{ opacity: 0.6 }}>{s.desc} · {s.items.length} items</p>
             </button>
           ))}
         </div>
         {items.length > 0 && (
-          <div className="space-y-0 max-h-36 overflow-y-auto">
+          <div className="space-y-0 max-h-44 overflow-y-auto">
             {items.map((item, i) => (
-              <div key={i} className="flex items-center gap-1.5 px-2.5 py-1.5">
-                <Check size={10} style={{ color: C.green }} />
-                <span className="text-xs text-gray-800">{item}</span>
+              <div key={i} className="flex items-center gap-2 px-3 py-2">
+                <Check size={12} style={{ color: C.green }} />
+                <span className="text-sm text-gray-800">{item}</span>
               </div>
             ))}
           </div>
         )}
         {items.length === 0 && (
-          <div className="text-center py-4">
-            <ShoppingCart size={20} className="text-gray-300 mx-auto mb-1" />
-            <p className="text-gray-400" style={{ fontSize: 10 }}>Select a cart above to begin</p>
+          <div className="text-center py-6">
+            <ShoppingCart size={28} className="text-gray-300 mx-auto mb-2" />
+            <p className="text-gray-400 text-sm">Select a cart above to begin</p>
           </div>
         )}
       </Card>
 
-      {loading && <div className="flex justify-center py-8"><div className="w-4 h-4 border-2 border-green-500 border-t-transparent rounded-full animate-spin" /></div>}
+      {loading && <div className="flex justify-center py-10"><div className="w-5 h-5 border-2 border-green-500 border-t-transparent rounded-full animate-spin" /></div>}
 
       {!loading && results.length > 0 && (
-        <div className="space-y-2.5">
+        <div className="space-y-3">
           {results.map((r, i) => (
-            <Card key={r.k} className={`p-3.5 ${i === 0 ? "ring-2 ring-green-400 ring-opacity-30" : ""}`}>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl">{r.icon}</span>
+            <Card key={r.k} className={`p-5 ${i === 0 ? "ring-2 ring-green-400 ring-opacity-30" : ""}`}>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{r.icon}</span>
                   <div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-sm font-bold" style={{ color: C.dark }}>{r.name}</span>
-                      {i === 0 && <span className="text-white px-1.5 py-0.5 rounded-full" style={{ fontSize: 9, fontWeight: 500, backgroundColor: C.green }}>Top</span>}
+                    <div className="flex items-center gap-2">
+                      <span className="text-base font-bold" style={{ color: C.dark }}>{r.name}</span>
+                      {i === 0 && <span className="text-white text-xs px-2 py-0.5 rounded-full font-medium" style={{ backgroundColor: C.green }}>Top Match</span>}
                     </div>
-                    <p className="text-gray-500" style={{ fontSize: 10 }}>{r.desc}</p>
+                    <p className="text-gray-500 text-sm">{r.desc}</p>
                   </div>
                 </div>
-                <span className="text-xl font-bold" style={{ color: C.dark }}>{Math.round(r.conf * 100)}%</span>
+                <span className="text-2xl font-bold" style={{ color: C.dark }}>{Math.round(r.conf * 100)}%</span>
               </div>
-              <div className="w-full bg-gray-100 rounded-full h-1 mb-2">
-                <div className="h-1 rounded-full transition-all duration-700" style={{ width: `${r.conf * 100}%`, backgroundColor: C.green }} />
+              <div className="w-full bg-gray-100 rounded-full h-1.5 mb-3">
+                <div className="h-1.5 rounded-full transition-all duration-700" style={{ width: `${r.conf * 100}%`, backgroundColor: C.green }} />
               </div>
-              <div className="flex flex-wrap gap-1">
-                {r.matched.map(s => <span key={s} className="bg-gray-100 text-gray-800 px-1.5 py-0.5 rounded-full" style={{ fontSize: 9 }}>{s}</span>)}
+              <div className="flex flex-wrap gap-1.5">
+                {r.matched.map(s => <span key={s} className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">{s}</span>)}
               </div>
               {i === 0 && (
-                <div className="flex justify-between mt-2.5 pt-2.5 border-t border-gray-100">
-                  <div className="text-center"><p className="text-sm font-bold" style={{ color: C.dark }}>${r.avgBasket}</p><p className="text-gray-400" style={{ fontSize: 9 }}>Avg basket</p></div>
-                  <div className="text-center"><p className="text-sm font-bold" style={{ color: C.dark }}>{r.vol}</p><p className="text-gray-400" style={{ fontSize: 9 }}>Weekly vol</p></div>
-                  <div className="text-center"><p className="text-sm font-bold" style={{ color: C.green }}>$7.40</p><p className="text-gray-400" style={{ fontSize: 9 }}>Proj. ROAS</p></div>
+                <div className="flex justify-between mt-4 pt-4 border-t border-gray-100">
+                  <div className="text-center"><p className="text-base font-bold" style={{ color: C.dark }}>${r.avgBasket}</p><p className="text-xs text-gray-400">Avg basket</p></div>
+                  <div className="text-center"><p className="text-base font-bold" style={{ color: C.dark }}>{r.vol}</p><p className="text-xs text-gray-400">Weekly vol</p></div>
+                  <div className="text-center"><p className="text-base font-bold" style={{ color: C.green }}>$7.40</p><p className="text-xs text-gray-400">Proj. ROAS</p></div>
                 </div>
               )}
             </Card>
@@ -167,15 +168,15 @@ function EngineTab() {
       )}
 
       {!loading && results.length === 0 && items.length < 2 && (
-        <div className="text-center py-8"><Search size={24} className="text-gray-300 mx-auto mb-1.5" /><p className="text-gray-400" style={{ fontSize: 10 }}>Add items to see occasion detection</p></div>
+        <div className="text-center py-10"><Search size={28} className="text-gray-300 mx-auto mb-2" /><p className="text-gray-400 text-sm">Add items to see occasion detection</p></div>
       )}
 
-      <p className="text-gray-400 uppercase tracking-widest mt-5 mb-2" style={{ fontSize: 9 }}>Occasion Taxonomy v1</p>
-      <div className="grid grid-cols-3 gap-1.5">
+      <p className="text-xs text-gray-400 uppercase tracking-widest mt-6 mb-3">Occasion Taxonomy v1</p>
+      <div className="grid grid-cols-3 gap-2">
         {Object.entries(OCCASIONS).map(([k, o]) => (
-          <div key={k} className="bg-gray-100 rounded-xl px-2 py-1.5 text-center">
-            <span className="text-base">{o.icon}</span>
-            <p className="font-medium" style={{ fontSize: 9, color: C.dark }}>{o.name}</p>
+          <div key={k} className="bg-gray-100 rounded-xl px-3 py-2.5 text-center">
+            <span className="text-xl">{o.icon}</span>
+            <p className="text-xs font-medium mt-0.5" style={{ color: C.dark }}>{o.name}</p>
           </div>
         ))}
       </div>
@@ -202,15 +203,15 @@ function BrandTab() {
 
   return (
     <div>
-      <h2 className="text-lg font-bold mb-0.5" style={{ color: C.dark }}>Brand Dashboard</h2>
-      <p className="text-gray-500 text-xs mb-3">Create a campaign targeting a shopping occasion.</p>
+      <h2 className="text-xl font-bold mb-1" style={{ color: C.dark }}>Brand Dashboard</h2>
+      <p className="text-gray-500 text-sm mb-5">Create a campaign targeting a shopping occasion.</p>
 
       {/* Endemic / Non-Endemic toggle */}
       <div className="flex gap-1.5 mb-3">
         {[{ k: "endemic", l: "Endemic (CPG)" }, { k: "non_endemic", l: "Non-Endemic" }].map(m => (
           <button key={m.k} onClick={() => { setMode(m.k); setLaunched(false); }}
             className="flex-1 py-2 rounded-xl font-semibold transition-all text-center"
-            style={{ fontSize: 11, backgroundColor: mode === m.k ? C.dark : C.light, color: mode === m.k ? "white" : C.mid }}>
+            style={{ fontSize: 13, backgroundColor: mode === m.k ? C.dark : C.light, color: mode === m.k ? "white" : C.mid }}>
             {m.l}
           </button>
         ))}
@@ -218,22 +219,22 @@ function BrandTab() {
 
       {isNE && (
         <div className="rounded-xl p-2.5 mb-3 border border-orange-200 bg-orange-50">
-          <p className="font-semibold text-gray-800 mb-1" style={{ fontSize: 11 }}>Non-endemic ads unlock new TAM</p>
-          <p className="text-gray-500 leading-relaxed" style={{ fontSize: 10 }}>
+          <p className="font-semibold text-gray-800 mb-1" style={{ fontSize: 13 }}>Non-endemic ads unlock new TAM</p>
+          <p className="text-gray-500 leading-relaxed" style={{ fontSize: 13 }}>
             Keywords tell you what someone buys. Occasions tell you what someone is <em>doing</em> — the signal non-endemic advertisers actually need. US non-endemic retail media grew 83% YoY in 2025.
           </p>
         </div>
       )}
 
-      <Card className="p-3.5 mb-3">
-        <p className="text-gray-400 uppercase tracking-widest mb-2.5" style={{ fontSize: 9 }}>Target Occasion</p>
+      <Card className="p-5 mb-4">
+        <p className="text-gray-400 uppercase tracking-widest mb-2.5" style={{ fontSize: 13 }}>Target Occasion</p>
         <div className="grid grid-cols-3 gap-1.5">
           {Object.entries(OCCASIONS).map(([k, oc]) => (
             <button key={k} onClick={() => { setOcc(k); setLaunched(false); }}
               className="flex items-center gap-1.5 p-2 rounded-xl text-left transition-all"
               style={{ backgroundColor: occ === k ? C.dark : C.light, color: occ === k ? "white" : C.text }}>
               <span className="text-sm">{oc.icon}</span>
-              <p className="font-medium leading-tight" style={{ fontSize: 10 }}>{oc.name}</p>
+              <p className="font-medium leading-tight" style={{ fontSize: 13 }}>{oc.name}</p>
             </button>
           ))}
         </div>
@@ -241,61 +242,61 @@ function BrandTab() {
 
       {/* Non-endemic: show matched advertiser for selected occasion */}
       {isNE && neMatch && (
-        <Card className="p-3.5 mb-3">
-          <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 9 }}>Matched Non-Endemic Advertiser</p>
+        <Card className="p-5 mb-4">
+          <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 13 }}>Matched Non-Endemic Advertiser</p>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: C.light }}>
               <span className="text-lg">{OCCASIONS[neMatch.occ].icon}</span>
             </div>
             <div className="flex-1">
               <p className="font-bold" style={{ fontSize: 13, color: C.dark }}>{neMatch.brand}</p>
-              <p className="text-gray-500" style={{ fontSize: 10 }}>{neMatch.product}</p>
-              <p className="font-medium mt-0.5" style={{ fontSize: 9, color: C.orange }}>{neMatch.cat}</p>
+              <p className="text-gray-500" style={{ fontSize: 13 }}>{neMatch.product}</p>
+              <p className="font-medium mt-0.5" style={{ fontSize: 13, color: C.orange }}>{neMatch.cat}</p>
             </div>
             <div className="text-right">
               <p className="font-bold" style={{ fontSize: 14, color: C.green }}>{neMatch.roas}x</p>
-              <p className="text-gray-400" style={{ fontSize: 9 }}>Proj. ROAS</p>
+              <p className="text-gray-400" style={{ fontSize: 13 }}>Proj. ROAS</p>
             </div>
           </div>
         </Card>
       )}
 
-      <Card className="p-3.5 mb-3">
-        <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 9 }}>Monthly Budget</p>
+      <Card className="p-5 mb-4">
+        <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 13 }}>Monthly Budget</p>
         <p className="text-2xl font-bold mb-2" style={{ color: C.dark }}>${budget.toLocaleString()}</p>
         <input type="range" min={5000} max={100000} step={5000} value={budget} onChange={e => setBudget(Number(e.target.value))} className="w-full accent-green-500 mb-3" />
-        <p className="text-gray-400 uppercase tracking-widest mb-1.5" style={{ fontSize: 9 }}>Ad Surfaces</p>
+        <p className="text-gray-400 uppercase tracking-widest mb-1.5" style={{ fontSize: 13 }}>Ad Surfaces</p>
         {surfaces.map(s => (
           <div key={s.n} className="flex items-center justify-between py-1">
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: isNE ? C.orange : C.green }} />
-              <span className="text-gray-800" style={{ fontSize: 11 }}>{s.n}</span>
+              <span className="text-gray-800" style={{ fontSize: 13 }}>{s.n}</span>
             </div>
-            <span className="text-gray-400" style={{ fontSize: 11 }}>{s.p}%</span>
+            <span className="text-gray-400" style={{ fontSize: 13 }}>{s.p}%</span>
           </div>
         ))}
       </Card>
 
-      <Card className="p-3.5 mb-3">
-        <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 9 }}>Projected Performance</p>
+      <Card className="p-5 mb-4">
+        <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 13 }}>Projected Performance</p>
         <div className="flex items-baseline gap-2 mb-1">
           <span className="text-2xl font-bold" style={{ color: C.green }}>${roas.toFixed(1)}</span>
-          <span className="text-gray-400" style={{ fontSize: 10 }}>Occasion ROAS</span>
+          <span className="text-gray-400" style={{ fontSize: 13 }}>Occasion ROAS</span>
         </div>
-        <p className="text-gray-400 mb-3" style={{ fontSize: 10 }}>
+        <p className="text-gray-400 mb-3" style={{ fontSize: 13 }}>
           {isNE ? "Non-endemic via occasion signal " : "vs $5.25 keyword avg "}
           <span className="font-medium" style={{ color: C.green }}>(+{Math.round(((roas - 5.25) / 5.25) * 100)}%)</span>
         </p>
         <div className="grid grid-cols-3 gap-2">
-          <div><p className="text-gray-400" style={{ fontSize: 10 }}>Impressions</p><p className="text-xs font-bold" style={{ color: C.dark }}>{(imp / 1e6).toFixed(1)}M</p></div>
-          <div><p className="text-gray-400" style={{ fontSize: 10 }}>{isNE ? "Installs/Leads" : "Conversions"}</p><p className="text-xs font-bold" style={{ color: C.dark }}>{Math.round(imp * (isNE ? 0.031 : 0.042) * 0.12).toLocaleString()}</p></div>
-          <div><p className="text-gray-400" style={{ fontSize: 10 }}>Revenue</p><p className="text-xs font-bold" style={{ color: C.green }}>${Math.round(budget * roas).toLocaleString()}</p></div>
+          <div><p className="text-gray-400" style={{ fontSize: 13 }}>Impressions</p><p className="text-xs font-bold" style={{ color: C.dark }}>{(imp / 1e6).toFixed(1)}M</p></div>
+          <div><p className="text-gray-400" style={{ fontSize: 13 }}>{isNE ? "Installs/Leads" : "Conversions"}</p><p className="text-xs font-bold" style={{ color: C.dark }}>{Math.round(imp * (isNE ? 0.031 : 0.042) * 0.12).toLocaleString()}</p></div>
+          <div><p className="text-gray-400" style={{ fontSize: 13 }}>Revenue</p><p className="text-xs font-bold" style={{ color: C.green }}>${Math.round(budget * roas).toLocaleString()}</p></div>
         </div>
         {!isNE && (
           <div className="mt-3 pt-2.5 border-t border-gray-100 space-y-1.5">
             {[{ l: `${o.icon} Occasion`, v: roas, c: C.green }, { l: "Keyword", v: 5.25, c: C.mid }, { l: "Amazon", v: 4.92, c: "#C4C8CC" }].map(r => (
               <div key={r.l}>
-                <div className="flex justify-between mb-0.5" style={{ fontSize: 10 }}><span className="text-gray-800">{r.l}</span><span className="font-bold" style={{ color: r.c }}>${r.v.toFixed(2)}</span></div>
+                <div className="flex justify-between mb-0.5" style={{ fontSize: 13 }}><span className="text-gray-800">{r.l}</span><span className="font-bold" style={{ color: r.c }}>${r.v.toFixed(2)}</span></div>
                 <div className="w-full bg-gray-100 rounded-full h-1"><div className="h-1 rounded-full transition-all duration-500" style={{ width: `${(r.v / 10) * 100}%`, backgroundColor: r.c }} /></div>
               </div>
             ))}
@@ -303,8 +304,8 @@ function BrandTab() {
         )}
         {isNE && (
           <div className="mt-3 pt-2.5 border-t border-gray-100">
-            <p className="text-gray-400 uppercase tracking-widest mb-1.5" style={{ fontSize: 9 }}>Why it works for non-endemic</p>
-            <p className="text-gray-500 leading-relaxed" style={{ fontSize: 10 }}>
+            <p className="text-gray-400 uppercase tracking-widest mb-1.5" style={{ fontSize: 13 }}>Why it works for non-endemic</p>
+            <p className="text-gray-500 leading-relaxed" style={{ fontSize: 13 }}>
               A life insurance company can't target "diapers." But they <em>can</em> target "new parent" — an occasion only Instacart's basket data reveals. Off-platform delivery via TikTok, YouTube, and The Trade Desk.
             </p>
           </div>
@@ -319,7 +320,7 @@ function BrandTab() {
 
       <Card className="mt-3 overflow-hidden">
         <div className="px-3.5 py-2.5 border-b border-gray-100">
-          <p className="text-gray-400 uppercase tracking-widest" style={{ fontSize: 9 }}>{isNE ? "Non-Endemic Campaigns" : "Active Campaigns"}</p>
+          <p className="text-gray-400 uppercase tracking-widest" style={{ fontSize: 13 }}>{isNE ? "Non-Endemic Campaigns" : "Active Campaigns"}</p>
         </div>
         {(isNE ? NON_ENDEMIC : CAMPAIGNS).map((c, i) => {
           const co = OCCASIONS[c.occ];
@@ -328,11 +329,11 @@ function BrandTab() {
               <div className="flex items-center gap-2">
                 <span>{co.icon}</span>
                 <div>
-                  <p className="font-medium" style={{ fontSize: 11, color: C.dark }}>{c.brand}</p>
-                  <p className="text-gray-400" style={{ fontSize: 9 }}>{c.product}{c.cat ? ` · ${c.cat}` : ""}</p>
+                  <p className="font-medium" style={{ fontSize: 13, color: C.dark }}>{c.brand}</p>
+                  <p className="text-gray-400" style={{ fontSize: 13 }}>{c.product}{c.cat ? ` · ${c.cat}` : ""}</p>
                 </div>
               </div>
-              <div className="text-right"><p className="font-bold" style={{ fontSize: 11, color: isNE ? C.orange : C.green }}>${c.roas}x</p><p className="text-gray-400" style={{ fontSize: 9 }}>{c.imp}</p></div>
+              <div className="text-right"><p className="font-bold" style={{ fontSize: 13, color: isNE ? C.orange : C.green }}>${c.roas}x</p><p className="text-gray-400" style={{ fontSize: 13 }}>{c.imp}</p></div>
             </div>
           );
         })}
@@ -352,14 +353,14 @@ function ConsumerTab() {
 
   return (
     <div>
-      <h2 className="text-lg font-bold mb-0.5" style={{ color: C.dark }}>Consumer Experience</h2>
-      <p className="text-gray-500 text-xs mb-4">How occasion-targeted ads appear to shoppers.</p>
+      <h2 className="text-xl font-bold mb-1" style={{ color: C.dark }}>Consumer Experience</h2>
+      <p className="text-gray-500 text-sm mb-5">How occasion-targeted ads appear to shoppers.</p>
 
       <div className="flex gap-1.5 mb-4">
         {[{ k: "app", l: "📱 App" }, { k: "caper", l: "🛒 Caper Cart" }].map(v => (
           <button key={v.k} onClick={() => setSurface(v.k)}
             className="px-3 py-1.5 rounded-full font-medium transition-all"
-            style={{ fontSize: 11, backgroundColor: surface === v.k ? C.dark : C.light, color: surface === v.k ? "white" : C.mid }}>
+            style={{ fontSize: 13, backgroundColor: surface === v.k ? C.dark : C.light, color: surface === v.k ? "white" : C.mid }}>
             {v.l}
           </button>
         ))}
@@ -368,36 +369,36 @@ function ConsumerTab() {
       {surface === "app" ? (
         <IPhoneFrame>
           <div className="px-3.5 py-2 flex justify-between items-center" style={{ backgroundColor: C.dark }}>
-            <span className="text-white font-semibold tracking-wide" style={{ fontSize: 10 }}>instacart</span>
-            <span className="text-white" style={{ fontSize: 9, opacity: 0.4 }}>Cart (5)</span>
+            <span className="text-white font-semibold tracking-wide" style={{ fontSize: 13 }}>instacart</span>
+            <span className="text-white" style={{ fontSize: 13, opacity: 0.4 }}>Cart (5)</span>
           </div>
           <div className="px-2.5 py-2">
             <p className="text-gray-400 uppercase tracking-widest mb-1" style={{ fontSize: 8 }}>Your Cart</p>
             {["Tortilla Chips", "Salsa Verde", "Beer 12-pack", "Frozen Wings", "Paper Plates"].map((item, i) => (
               <div key={i} className="flex justify-between py-1 border-b border-gray-100 last:border-0">
-                <span className="text-gray-800" style={{ fontSize: 10 }}>{item}</span>
-                <span className="text-gray-400" style={{ fontSize: 9 }}>${(3.99 + i * 2.5).toFixed(2)}</span>
+                <span className="text-gray-800" style={{ fontSize: 13 }}>{item}</span>
+                <span className="text-gray-400" style={{ fontSize: 13 }}>${(3.99 + i * 2.5).toFixed(2)}</span>
               </div>
             ))}
           </div>
           <div className={`mx-2.5 mb-1.5 transition-all duration-500 ${showAd ? "opacity-100" : "opacity-0"}`}>
             <div className="bg-orange-50 border border-orange-200 rounded-lg overflow-hidden">
               <div className="px-2.5 py-1 flex justify-between">
-                <span className="font-bold" style={{ fontSize: 9, color: C.orange }}>🏈 Game Day Essentials</span>
+                <span className="font-bold" style={{ fontSize: 13, color: C.orange }}>🏈 Game Day Essentials</span>
                 <span className="text-gray-400" style={{ fontSize: 7 }}>Sponsored</span>
               </div>
               <div className="px-2.5 pb-2">
                 <div className="flex items-center gap-2">
                   <div className="w-9 h-9 bg-yellow-50 rounded-md flex items-center justify-center text-base">🧀</div>
                   <div className="flex-1">
-                    <p className="font-semibold text-gray-800" style={{ fontSize: 10 }}>Tostitos Queso Blanco</p>
+                    <p className="font-semibold text-gray-800" style={{ fontSize: 13 }}>Tostitos Queso Blanco</p>
                     <p className="text-gray-400" style={{ fontSize: 8 }}>15 oz · $4.99</p>
                     <p className="font-medium" style={{ fontSize: 8, color: C.green }}>$1.00 off</p>
                   </div>
                 </div>
                 <button onClick={() => setAdded(true)}
                   className="w-full mt-1.5 py-1 rounded-md font-semibold"
-                  style={{ fontSize: 9, backgroundColor: added ? "#E8F5E9" : C.dark, color: added ? C.green : "white" }}>
+                  style={{ fontSize: 13, backgroundColor: added ? "#E8F5E9" : C.dark, color: added ? C.green : "white" }}>
                   {added ? "Added" : "Add to Cart"}
                 </button>
               </div>
@@ -405,7 +406,7 @@ function ConsumerTab() {
           </div>
           <div className="mx-2.5 mb-2.5">
             <div className="rounded-lg py-2 text-center" style={{ backgroundColor: C.green }}>
-              <p className="text-white font-semibold" style={{ fontSize: 10 }}>Checkout · $32.45</p>
+              <p className="text-white font-semibold" style={{ fontSize: 13 }}>Checkout · $32.45</p>
             </div>
           </div>
         </IPhoneFrame>
@@ -413,13 +414,13 @@ function ConsumerTab() {
         <div className="mx-auto" style={{ width: 240 }}>
           <div className="bg-gray-800 rounded-2xl p-2 shadow-xl">
             <div className="flex justify-between px-2 py-1">
-              <span className="text-gray-500" style={{ fontSize: 9 }}>Caper Cart</span>
-              <span style={{ fontSize: 9, color: C.green }}>● Connected</span>
+              <span className="text-gray-500" style={{ fontSize: 13 }}>Caper Cart</span>
+              <span style={{ fontSize: 13, color: C.green }}>● Connected</span>
             </div>
             <div className="bg-white rounded-xl overflow-hidden">
               <div className="px-3 py-2.5" style={{ backgroundColor: C.dark }}>
                 <div className="flex justify-between items-center">
-                  <div><p className="text-white font-semibold" style={{ fontSize: 11 }}>Hi Charlie</p><p className="text-white" style={{ fontSize: 9, opacity: 0.4 }}>5 of 8 items</p></div>
+                  <div><p className="text-white font-semibold" style={{ fontSize: 13 }}>Hi Charlie</p><p className="text-white" style={{ fontSize: 13, opacity: 0.4 }}>5 of 8 items</p></div>
                   <p className="text-white text-sm font-bold">$28.47</p>
                 </div>
                 <div className="mt-1.5 w-full rounded-full h-0.5" style={{ backgroundColor: "rgba(255,255,255,0.1)" }}>
@@ -428,24 +429,24 @@ function ConsumerTab() {
               </div>
               <div className="px-2.5 py-1.5 space-y-0.5">
                 {["Chips", "Salsa", "Beer", "Wings", "Plates"].map((item, i) => (
-                  <div key={i} className="flex items-center gap-1.5 text-gray-800" style={{ fontSize: 10 }}><Check size={9} style={{ color: C.green }} />{item}</div>
+                  <div key={i} className="flex items-center gap-1.5 text-gray-800" style={{ fontSize: 13 }}><Check size={9} style={{ color: C.green }} />{item}</div>
                 ))}
               </div>
               <div className={`mx-2.5 mb-1.5 transition-all duration-500 ${showAd ? "opacity-100" : "opacity-0"}`}>
                 <div className="rounded-lg border border-orange-200 bg-orange-50 overflow-hidden">
                   <div className="px-2.5 py-1" style={{ backgroundColor: "rgba(255,112,9,0.1)" }}>
-                    <span className="font-bold" style={{ fontSize: 9, color: C.orange }}>🏈 GAME DAY DETECTED</span>
+                    <span className="font-bold" style={{ fontSize: 13, color: C.orange }}>🏈 GAME DAY DETECTED</span>
                   </div>
                   <div className="p-2">
                     <div className="flex items-center gap-2 bg-white rounded-md p-1.5">
                       <span className="text-base">🧀</span>
                       <div className="flex-1">
-                        <p className="font-medium" style={{ fontSize: 10 }}>Tostitos Queso</p>
+                        <p className="font-medium" style={{ fontSize: 13 }}>Tostitos Queso</p>
                         <p style={{ fontSize: 8, color: C.green }}>$1 off · Aisle 3</p>
                       </div>
                       <button onClick={() => setAdded(true)}
                         className="px-2 py-1 rounded-md font-semibold"
-                        style={{ fontSize: 9, backgroundColor: added ? "#E8F5E9" : C.dark, color: added ? C.green : "white" }}>
+                        style={{ fontSize: 13, backgroundColor: added ? "#E8F5E9" : C.dark, color: added ? C.green : "white" }}>
                         {added ? "✓" : "Add"}
                       </button>
                     </div>
@@ -453,10 +454,10 @@ function ConsumerTab() {
                 </div>
               </div>
               <div className="mx-2.5 mb-2 bg-gray-100 rounded-md p-1.5 flex items-center gap-1.5">
-                <span style={{ fontSize: 10 }}>📍</span>
+                <span style={{ fontSize: 13 }}>📍</span>
                 <div>
                   <p className="text-gray-400" style={{ fontSize: 8 }}>Next</p>
-                  <p className="text-gray-800" style={{ fontSize: 10 }}>Guacamole → Aisle 4</p>
+                  <p className="text-gray-800" style={{ fontSize: 13 }}>Guacamole → Aisle 4</p>
                 </div>
               </div>
             </div>
@@ -465,7 +466,7 @@ function ConsumerTab() {
       )}
 
       <Card className="p-3.5 mt-4">
-        <p className="text-gray-400 uppercase tracking-widest mb-2.5" style={{ fontSize: 9 }}>How It Works</p>
+        <p className="text-gray-400 uppercase tracking-widest mb-2.5" style={{ fontSize: 13 }}>How It Works</p>
         {[
           { n: "1", t: "Detect", d: "Classify occasion from basket signals in real time." },
           { n: "2", t: "Match", d: "At 75%+ confidence, activate occasion ad inventory." },
@@ -473,8 +474,8 @@ function ConsumerTab() {
           { n: "4", t: "Attribute", d: "Ad → add → purchase. Full closed loop." },
         ].map(s => (
           <div key={s.n} className="flex gap-2.5 mb-2.5 last:mb-0">
-            <div className="w-5 h-5 text-white rounded-full flex items-center justify-center flex-shrink-0" style={{ fontSize: 9, fontWeight: 700, backgroundColor: C.dark }}>{s.n}</div>
-            <div><p className="font-semibold" style={{ fontSize: 11, color: C.dark }}>{s.t}</p><p className="text-gray-500" style={{ fontSize: 10 }}>{s.d}</p></div>
+            <div className="w-5 h-5 text-white rounded-full flex items-center justify-center flex-shrink-0" style={{ fontSize: 13, fontWeight: 700, backgroundColor: C.dark }}>{s.n}</div>
+            <div><p className="font-semibold" style={{ fontSize: 13, color: C.dark }}>{s.t}</p><p className="text-gray-500" style={{ fontSize: 13 }}>{s.d}</p></div>
           </div>
         ))}
       </Card>
@@ -485,7 +486,7 @@ function ConsumerTab() {
           { t: "Premium tier", d: "New inventory, no keyword cannibalization." },
           { t: "Cross-surface", d: "App + Caper Cart + off-platform, one campaign." },
           { t: "Defensible", d: "Only Instacart has this basket data at scale." },
-        ].map(i => <p key={i.t} className="text-gray-800" style={{ fontSize: 10 }}><span className="font-semibold" style={{ color: C.dark }}>{i.t}:</span> {i.d}</p>)}
+        ].map(i => <p key={i.t} className="text-gray-800" style={{ fontSize: 13 }}><span className="font-semibold" style={{ color: C.dark }}>{i.t}:</span> {i.d}</p>)}
       </div>
     </div>
   );
@@ -497,10 +498,10 @@ function ConsumerTab() {
 function AboutTab() {
   return (
     <div>
-      <h2 className="text-lg font-bold mb-0.5" style={{ color: C.dark }}>About This Concept</h2>
-      <p className="text-gray-500 text-xs mb-4">A new ad primitive for Instacart retail media.</p>
+      <h2 className="text-xl font-bold mb-1" style={{ color: C.dark }}>About This Concept</h2>
+      <p className="text-gray-500 text-sm mb-5">A new ad primitive for Instacart retail media.</p>
 
-      <Card className="p-4 mb-3">
+      <Card className="p-5 mb-4">
         <h3 className="text-sm font-bold mb-2" style={{ color: C.dark }}>The Insight</h3>
         <p className="text-xs text-gray-800 leading-relaxed mb-2">
           Carrot Ads surpassed <strong>$1B+ in ad revenue</strong> with 9,000+ advertisers. But targeting is keyword-based — the same as every other retail media network.
@@ -517,55 +518,55 @@ function AboutTab() {
 
       {/* iPhone mockup */}
       <div className="mb-3">
-        <p className="text-gray-400 uppercase tracking-widest mb-2.5 text-center" style={{ fontSize: 9 }}>The Consumer Ad Experience</p>
+        <p className="text-gray-400 uppercase tracking-widest mb-2.5 text-center" style={{ fontSize: 13 }}>The Consumer Ad Experience</p>
         <div className="bg-gray-100 rounded-2xl py-5 px-3">
           <IPhoneFrame>
             <div className="px-3.5 py-2 flex justify-between items-center" style={{ backgroundColor: C.dark }}>
-              <span className="text-white font-semibold tracking-wide" style={{ fontSize: 10 }}>instacart</span>
-              <span className="text-white" style={{ fontSize: 9, opacity: 0.4 }}>Cart (5)</span>
+              <span className="text-white font-semibold tracking-wide" style={{ fontSize: 13 }}>instacart</span>
+              <span className="text-white" style={{ fontSize: 13, opacity: 0.4 }}>Cart (5)</span>
             </div>
             <div className="px-2.5 py-2">
               <p className="text-gray-400 uppercase tracking-widest mb-1" style={{ fontSize: 8 }}>Your Cart</p>
               {["Tortilla Chips", "Salsa Verde", "Beer 12-pack", "Frozen Wings", "Paper Plates"].map((item, i) => (
                 <div key={i} className="flex justify-between py-1 border-b border-gray-100 last:border-0">
-                  <span className="text-gray-800" style={{ fontSize: 10 }}>{item}</span>
-                  <span className="text-gray-400" style={{ fontSize: 9 }}>${(3.99 + i * 2.5).toFixed(2)}</span>
+                  <span className="text-gray-800" style={{ fontSize: 13 }}>{item}</span>
+                  <span className="text-gray-400" style={{ fontSize: 13 }}>${(3.99 + i * 2.5).toFixed(2)}</span>
                 </div>
               ))}
             </div>
             <div className="mx-2.5 mb-1.5">
               <div className="bg-orange-50 border border-orange-200 rounded-lg overflow-hidden">
                 <div className="px-2.5 py-1 flex justify-between items-center" style={{ backgroundColor: "rgba(255,112,9,0.05)" }}>
-                  <span className="font-bold" style={{ fontSize: 9, color: C.orange }}>🏈 Game Day Essentials</span>
+                  <span className="font-bold" style={{ fontSize: 13, color: C.orange }}>🏈 Game Day Essentials</span>
                   <span className="text-gray-400" style={{ fontSize: 7 }}>Sponsored</span>
                 </div>
                 <div className="px-2.5 pb-2 pt-1">
                   <div className="flex items-center gap-2">
                     <div className="w-10 h-10 bg-yellow-50 rounded-md flex items-center justify-center text-lg">🧀</div>
                     <div className="flex-1">
-                      <p className="font-semibold text-gray-800" style={{ fontSize: 10 }}>Tostitos Queso Blanco</p>
+                      <p className="font-semibold text-gray-800" style={{ fontSize: 13 }}>Tostitos Queso Blanco</p>
                       <p className="text-gray-500" style={{ fontSize: 8 }}>15 oz · $4.99</p>
                       <p className="font-semibold" style={{ fontSize: 8, color: C.green }}>$1.00 off with loyalty</p>
                     </div>
                   </div>
-                  <div className="text-white text-center py-1.5 rounded-md mt-1.5 font-semibold" style={{ fontSize: 9, backgroundColor: C.dark }}>Add to Cart</div>
+                  <div className="text-white text-center py-1.5 rounded-md mt-1.5 font-semibold" style={{ fontSize: 13, backgroundColor: C.dark }}>Add to Cart</div>
                 </div>
               </div>
             </div>
             <div className="mx-2.5 mb-2.5">
               <div className="rounded-lg py-2 text-center" style={{ backgroundColor: C.green }}>
-                <p className="text-white font-semibold" style={{ fontSize: 10 }}>Checkout · $32.45</p>
+                <p className="text-white font-semibold" style={{ fontSize: 13 }}>Checkout · $32.45</p>
                 <p className="text-white" style={{ fontSize: 8, opacity: 0.5 }}>Free delivery with Instacart+</p>
               </div>
             </div>
           </IPhoneFrame>
-          <p className="text-gray-400 text-center mt-2.5 leading-relaxed" style={{ fontSize: 9 }}>
+          <p className="text-gray-400 text-center mt-2.5 leading-relaxed" style={{ fontSize: 13 }}>
             Occasion ad triggered by basket composition<br />matching "Game Day" at 87% confidence
           </p>
         </div>
       </div>
 
-      <Card className="p-4 mb-3">
+      <Card className="p-5 mb-4">
         <h3 className="text-sm font-bold mb-2" style={{ color: C.dark }}>How It Works</h3>
         <p className="text-xs text-gray-800 leading-relaxed mb-2">
           As items are added — online or via Caper Cart — the engine classifies basket composition against a trained
@@ -577,7 +578,7 @@ function AboutTab() {
         </p>
       </Card>
 
-      <Card className="p-4 mb-3">
+      <Card className="p-5 mb-4">
         <h3 className="text-sm font-bold mb-2" style={{ color: C.dark }}>Strategic Alignment</h3>
         <div className="space-y-2.5">
           {[
@@ -588,13 +589,13 @@ function AboutTab() {
           ].map(i => (
             <div key={i.t} className="flex gap-2">
               <div className="w-0.5 rounded-full flex-shrink-0" style={{ backgroundColor: C.green }} />
-              <div><p className="font-semibold" style={{ fontSize: 11, color: C.dark }}>{i.t}</p><p className="text-gray-500 leading-relaxed" style={{ fontSize: 10 }}>{i.d}</p></div>
+              <div><p className="font-semibold" style={{ fontSize: 13, color: C.dark }}>{i.t}</p><p className="text-gray-500 leading-relaxed" style={{ fontSize: 13 }}>{i.d}</p></div>
             </div>
           ))}
         </div>
       </Card>
 
-      <Card className="p-4 mb-3">
+      <Card className="p-5 mb-4">
         <h3 className="text-sm font-bold mb-2" style={{ color: C.dark }}>Why This Wins</h3>
         <div className="grid grid-cols-2 gap-2">
           {[
@@ -604,14 +605,14 @@ function AboutTab() {
             { t: "Defensible", d: "Only Instacart has this data." },
           ].map(i => (
             <div key={i.t} className="bg-gray-100 rounded-xl p-2.5">
-              <p className="font-semibold mb-0.5" style={{ fontSize: 11, color: C.dark }}>{i.t}</p>
-              <p className="text-gray-500" style={{ fontSize: 10 }}>{i.d}</p>
+              <p className="font-semibold mb-0.5" style={{ fontSize: 13, color: C.dark }}>{i.t}</p>
+              <p className="text-gray-500" style={{ fontSize: 13 }}>{i.d}</p>
             </div>
           ))}
         </div>
       </Card>
 
-      <Card className="p-4 mb-3">
+      <Card className="p-5 mb-4">
         <h3 className="text-sm font-bold mb-2" style={{ color: C.dark }}>Non-Endemic TAM Expansion</h3>
         <p className="text-xs text-gray-800 leading-relaxed mb-2">
           Endemic ad spend is approaching saturation. The next growth frontier: <strong>non-endemic advertisers</strong> — financial services, streaming, fitness, education, travel — who need behavioral signals, not product keywords.
@@ -628,13 +629,13 @@ function AboutTab() {
             { occ: "🥂 Brunch", ne: "OpenTable, Drizly, Sur La Table" },
           ].map(r => (
             <div key={r.occ} className="flex items-start gap-2 py-1 border-b border-gray-100 last:border-0">
-              <span className="font-semibold whitespace-nowrap" style={{ fontSize: 10, color: C.dark }}>{r.occ}</span>
-              <span className="text-gray-500" style={{ fontSize: 10 }}>{r.ne}</span>
+              <span className="font-semibold whitespace-nowrap" style={{ fontSize: 13, color: C.dark }}>{r.occ}</span>
+              <span className="text-gray-500" style={{ fontSize: 13 }}>{r.ne}</span>
             </div>
           ))}
         </div>
         <div className="mt-3 rounded-xl p-2.5" style={{ backgroundColor: C.light }}>
-          <p className="text-gray-500 leading-relaxed" style={{ fontSize: 10 }}>
+          <p className="text-gray-500 leading-relaxed" style={{ fontSize: 13 }}>
             <span className="font-semibold" style={{ color: C.orange }}>The unlock:</span> Instacart's RPM infrastructure (TikTok, YouTube, The Trade Desk) already delivers audiences off-platform. Occasion segments package that data for non-endemic buyers who can't use keyword targeting.
           </p>
         </div>
@@ -648,7 +649,7 @@ function AboutTab() {
       </div>
 
       <div className="text-center">
-        <p className="text-gray-500" style={{ fontSize: 9 }}>Product concept by <strong>Charlie Bass</strong> · March 2026</p>
+        <p className="text-gray-500" style={{ fontSize: 13 }}>Product concept by <strong>Charlie Bass</strong> · March 2026</p>
       </div>
     </div>
   );
@@ -662,14 +663,14 @@ function EconomicsTab() {
 
   return (
     <div>
-      <h2 className="text-lg font-bold mb-0.5" style={{ color: C.dark }}>Economics &amp; Strategy</h2>
-      <p className="text-gray-500 text-xs mb-3">Revenue model, risk assessment, and go-to-market recommendation.</p>
+      <h2 className="text-xl font-bold mb-1" style={{ color: C.dark }}>Economics &amp; Strategy</h2>
+      <p className="text-gray-500 text-sm mb-5">Revenue model, risk assessment, and go-to-market recommendation.</p>
 
       <div className="flex gap-1 mb-4">
         {[{ k: "model", l: "Model", ic: TrendingUp }, { k: "risks", l: "Risks", ic: AlertTriangle }, { k: "rec", l: "GTM", ic: Target }].map(s => (
           <button key={s.k} onClick={() => setSection(s.k)}
             className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl font-semibold transition-all"
-            style={{ fontSize: 10, backgroundColor: section === s.k ? C.dark : C.light, color: section === s.k ? "white" : C.mid }}>
+            style={{ fontSize: 13, backgroundColor: section === s.k ? C.dark : C.light, color: section === s.k ? "white" : C.mid }}>
             <s.ic size={12} />{s.l}
           </button>
         ))}
@@ -691,8 +692,8 @@ function EconomicsTab() {
             ))}
           </div>
 
-          <Card className="p-3.5 mb-3">
-            <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 9 }}>Revenue Model Assumptions</p>
+          <Card className="p-5 mb-4">
+            <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 13 }}>Revenue Model Assumptions</p>
             {[
               { p: "Annual orders", v: "338.8M", b: "FY2024 reported" },
               { p: "Occasion-eligible baskets", v: "60%", b: "4+ items in known occasions" },
@@ -704,16 +705,16 @@ function EconomicsTab() {
             ].map(r => (
               <div key={r.p} className="flex items-center justify-between py-1.5 border-b border-gray-100 last:border-0">
                 <div className="flex-1">
-                  <span className="text-gray-800" style={{ fontSize: 10 }}>{r.p}</span>
+                  <span className="text-gray-800" style={{ fontSize: 13 }}>{r.p}</span>
                   <span className="text-gray-400 ml-1" style={{ fontSize: 8 }}>({r.b})</span>
                 </div>
-                <span className="font-bold" style={{ fontSize: 11, color: C.dark }}>{r.v}</span>
+                <span className="font-bold" style={{ fontSize: 13, color: C.dark }}>{r.v}</span>
               </div>
             ))}
           </Card>
 
-          <Card className="p-3.5 mb-3">
-            <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 9 }}>Year 1 Projection</p>
+          <Card className="p-5 mb-4">
+            <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 13 }}>Year 1 Projection</p>
             {[
               { m: "Occasion activations", v: "81.3M", c: C.dark },
               { m: "Total impressions", v: "260.2M", c: C.dark },
@@ -722,14 +723,14 @@ function EconomicsTab() {
               { m: "Total incremental", v: "$270–370M", c: C.green },
             ].map(r => (
               <div key={r.m} className="flex items-center justify-between py-1.5 border-b border-gray-100 last:border-0">
-                <span className="text-gray-800" style={{ fontSize: 10 }}>{r.m}</span>
+                <span className="text-gray-800" style={{ fontSize: 13 }}>{r.m}</span>
                 <span className="font-bold" style={{ fontSize: 12, color: r.c }}>{r.v}</span>
               </div>
             ))}
           </Card>
 
-          <Card className="p-3.5 mb-3">
-            <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 9 }}>Why Occasions Command a Premium</p>
+          <Card className="p-5 mb-4">
+            <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 13 }}>Why Occasions Command a Premium</p>
             {[
               { t: "Signal Density", d: "Multi-item basket reveals occasion intent — informationally richer than a single keyword search. Higher signal → higher predicted conversion → higher WTP." },
               { t: "Reduced Adverse Selection", d: "Keyword auctions favor brands with worst organic relevance. Occasion targeting naturally filters for contextually relevant matches." },
@@ -737,18 +738,18 @@ function EconomicsTab() {
               { t: "Data Flywheel", d: "Each classified basket strengthens the model. More advertisers → better models → higher ROAS → more demand. Deepening moat over time." },
             ].map(i => (
               <div key={i.t} className="mb-2.5 last:mb-0">
-                <p className="font-semibold mb-0.5" style={{ fontSize: 11, color: C.dark }}>{i.t}</p>
-                <p className="text-gray-500 leading-relaxed" style={{ fontSize: 10 }}>{i.d}</p>
+                <p className="font-semibold mb-0.5" style={{ fontSize: 13, color: C.dark }}>{i.t}</p>
+                <p className="text-gray-500 leading-relaxed" style={{ fontSize: 13 }}>{i.d}</p>
               </div>
             ))}
           </Card>
 
           <div className="rounded-xl p-3 mb-3" style={{ backgroundColor: C.light }}>
-            <p className="text-gray-400 uppercase tracking-widest mb-1.5" style={{ fontSize: 9 }}>Auction Design</p>
-            <p className="font-bold text-center mb-1" style={{ fontSize: 11, color: C.dark }}>
+            <p className="text-gray-400 uppercase tracking-widest mb-1.5" style={{ fontSize: 13 }}>Auction Design</p>
+            <p className="font-bold text-center mb-1" style={{ fontSize: 13, color: C.dark }}>
               Ad Rank = Bid × Relevance × CTR × Creative Quality
             </p>
-            <p className="text-gray-500 text-center leading-relaxed" style={{ fontSize: 9 }}>
+            <p className="text-gray-500 text-center leading-relaxed" style={{ fontSize: 13 }}>
               Modified second-price auction with quality scoring. Highest bidder doesn't always win — most relevant ad does.
             </p>
           </div>
@@ -768,12 +769,12 @@ function EconomicsTab() {
             <Card key={risk.r} className="p-3.5 mb-2.5">
               <div className="flex items-center justify-between mb-1.5">
                 <p className="font-bold" style={{ fontSize: 12, color: C.dark }}>{risk.r}</p>
-                <span className="px-2 py-0.5 rounded-full text-white font-semibold" style={{ fontSize: 9, backgroundColor: risk.color }}>{risk.sev}</span>
+                <span className="px-2 py-0.5 rounded-full text-white font-semibold" style={{ fontSize: 13, backgroundColor: risk.color }}>{risk.sev}</span>
               </div>
-              <p className="text-gray-500 mb-2" style={{ fontSize: 10 }}><span className="font-semibold text-gray-700">Impact:</span> {risk.impact}</p>
+              <p className="text-gray-500 mb-2" style={{ fontSize: 13 }}><span className="font-semibold text-gray-700">Impact:</span> {risk.impact}</p>
               <div className="rounded-lg p-2.5 bg-gray-100">
                 <p className="text-gray-400 uppercase tracking-widest mb-1" style={{ fontSize: 8 }}>Mitigation</p>
-                <p className="text-gray-600 leading-relaxed" style={{ fontSize: 10 }}>{risk.mit}</p>
+                <p className="text-gray-600 leading-relaxed" style={{ fontSize: 13 }}>{risk.mit}</p>
               </div>
             </Card>
           ))}
@@ -785,13 +786,13 @@ function EconomicsTab() {
           <div className="rounded-2xl p-4 mb-3" style={{ backgroundColor: C.dark }}>
             <Sparkles size={14} style={{ color: C.orange }} className="mb-2" />
             <p className="text-white text-sm font-bold mb-1">Go-to-Market Recommendation</p>
-            <p className="text-white leading-relaxed" style={{ fontSize: 11, opacity: 0.85 }}>
+            <p className="text-white leading-relaxed" style={{ fontSize: 13, opacity: 0.85 }}>
               Build occasion-based targeting as a premium tier within Carrot Ads. Launch with 6 core occasions and 3–5 pilot non-endemic advertisers. Leverage existing AI infrastructure — no new data collection required.
             </p>
           </div>
 
-          <Card className="p-3.5 mb-3">
-            <p className="text-gray-400 uppercase tracking-widest mb-2.5" style={{ fontSize: 9 }}>Launch Phasing</p>
+          <Card className="p-5 mb-4">
+            <p className="text-gray-400 uppercase tracking-widest mb-2.5" style={{ fontSize: 13 }}>Launch Phasing</p>
             {[
               { phase: "Phase 1", time: "Q3 2026", title: "Pilot", items: "6 occasions, 20 endemic brands, Instacart marketplace only. Validate classification accuracy and ROAS lift." },
               { phase: "Phase 2", time: "Q4 2026", title: "Endemic Scale", items: "Open to all 9,000+ advertisers. Add Caper Cart + retailer site surfaces. Launch Occasion Boost overlay in Ads Manager." },
@@ -800,24 +801,24 @@ function EconomicsTab() {
             ].map(p => (
               <div key={p.phase} className="flex gap-2.5 mb-3 last:mb-0">
                 <div className="flex flex-col items-center">
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0" style={{ fontSize: 9, backgroundColor: C.dark }}>
+                  <div className="w-6 h-6 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0" style={{ fontSize: 13, backgroundColor: C.dark }}>
                     {p.phase.split(" ")[1]}
                   </div>
                   <div className="w-0.5 flex-1 mt-1 rounded-full bg-gray-200" />
                 </div>
                 <div className="flex-1 pb-1">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <span className="font-bold" style={{ fontSize: 11, color: C.dark }}>{p.title}</span>
-                    <span className="text-gray-400 font-medium" style={{ fontSize: 9 }}>{p.time}</span>
+                    <span className="font-bold" style={{ fontSize: 13, color: C.dark }}>{p.title}</span>
+                    <span className="text-gray-400 font-medium" style={{ fontSize: 13 }}>{p.time}</span>
                   </div>
-                  <p className="text-gray-500 leading-relaxed" style={{ fontSize: 10 }}>{p.items}</p>
+                  <p className="text-gray-500 leading-relaxed" style={{ fontSize: 13 }}>{p.items}</p>
                 </div>
               </div>
             ))}
           </Card>
 
-          <Card className="p-3.5 mb-3">
-            <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 9 }}>Structural Advantages</p>
+          <Card className="p-5 mb-4">
+            <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 13 }}>Structural Advantages</p>
             <div className="grid grid-cols-2 gap-2">
               {[
                 { t: "338.8M Orders", d: "Unmatched basket-level data across 1,800+ retailers." },
@@ -828,15 +829,15 @@ function EconomicsTab() {
                 { t: "Uber Eats", d: "Carrot Ads integration extends surface reach further." },
               ].map(a => (
                 <div key={a.t} className="bg-gray-100 rounded-xl p-2.5">
-                  <p className="font-semibold mb-0.5" style={{ fontSize: 10, color: C.dark }}>{a.t}</p>
-                  <p className="text-gray-500 leading-relaxed" style={{ fontSize: 9 }}>{a.d}</p>
+                  <p className="font-semibold mb-0.5" style={{ fontSize: 13, color: C.dark }}>{a.t}</p>
+                  <p className="text-gray-500 leading-relaxed" style={{ fontSize: 13 }}>{a.d}</p>
                 </div>
               ))}
             </div>
           </Card>
 
-          <Card className="p-3.5 mb-3">
-            <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 9 }}>Competitive White Space</p>
+          <Card className="p-5 mb-4">
+            <p className="text-gray-400 uppercase tracking-widest mb-2" style={{ fontSize: 13 }}>Competitive White Space</p>
             <p className="text-xs text-gray-800 leading-relaxed mb-2">
               No existing platform combines <strong>real-time basket occasion inference</strong> with <strong>closed-loop attribution</strong> and <strong>non-endemic advertiser access</strong>.
             </p>
@@ -847,14 +848,14 @@ function EconomicsTab() {
               { co: "Grocery TV", gap: "Physical context only, no behavioral data" },
             ].map(c => (
               <div key={c.co} className="flex items-center gap-2 py-1.5 border-b border-gray-100 last:border-0">
-                <span className="font-semibold" style={{ fontSize: 10, color: C.dark }}>{c.co}</span>
-                <span className="text-gray-400" style={{ fontSize: 10 }}>— {c.gap}</span>
+                <span className="font-semibold" style={{ fontSize: 13, color: C.dark }}>{c.co}</span>
+                <span className="text-gray-400" style={{ fontSize: 13 }}>— {c.gap}</span>
               </div>
             ))}
           </Card>
 
           <div className="text-center mt-4">
-            <p className="text-gray-500" style={{ fontSize: 9 }}>Product concept by <strong>Charlie Bass</strong> · March 2026</p>
+            <p className="text-gray-500" style={{ fontSize: 13 }}>Product concept by <strong>Charlie Bass</strong> · March 2026</p>
           </div>
         </div>
       )}
@@ -877,24 +878,25 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="px-1.5 py-2 flex items-center gap-1.5" style={{ backgroundColor: C.dark }}>
-        <span className="text-white font-bold whitespace-nowrap tracking-tight" style={{ fontSize: 12 }}>instacart</span>
-        <div className="h-4" style={{ width: 1, backgroundColor: "rgba(255,255,255,0.2)" }} />
-        <div className="flex gap-0.5 flex-1 min-w-0">
-          {tabs.map(t => (
-            <button key={t.k} onClick={() => setTab(t.k)}
-              className="flex items-center gap-0.5 px-1.5 py-1.5 font-medium rounded-md transition-all whitespace-nowrap"
-              style={{
-                fontSize: 9,
-                backgroundColor: tab === t.k ? "white" : "transparent",
-                color: tab === t.k ? C.dark : "rgba(255,255,255,0.5)",
-              }}>
-              <t.i size={10} />{t.l}
-            </button>
-          ))}
+      <div style={{ backgroundColor: C.dark }}>
+        <div className="max-w-2xl mx-auto px-5 py-3 flex items-center gap-3">
+          <span className="text-white font-bold text-lg whitespace-nowrap tracking-tight">instacart</span>
+          <div className="h-5" style={{ width: 1, backgroundColor: "rgba(255,255,255,0.2)" }} />
+          <div className="flex gap-1 flex-1 min-w-0">
+            {tabs.map(t => (
+              <button key={t.k} onClick={() => setTab(t.k)}
+                className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-all whitespace-nowrap"
+                style={{
+                  backgroundColor: tab === t.k ? "white" : "transparent",
+                  color: tab === t.k ? C.dark : "rgba(255,255,255,0.55)",
+                }}>
+                <t.i size={14} />{t.l}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
-      <div className="px-3 py-4">
+      <div className="max-w-2xl mx-auto px-5 py-6">
         {tab === "engine" && <EngineTab />}
         {tab === "brand" && <BrandTab />}
         {tab === "consumer" && <ConsumerTab />}
